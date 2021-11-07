@@ -28,10 +28,10 @@ gamma = lambda V : 1 / math.sqrt(1.0 - V**2)
 
 
 def transform_x(x):
-    return get_gamma() * (x - (V*t))
+    return gamma(V) * (x - (V*t))
 
 def transform_t(t):
-    return get_gamma() * (t - (V * x))
+    return gamma(V) * (t - (V * x))
 
 #Variables dans S'
 xp = transform_x(x)
