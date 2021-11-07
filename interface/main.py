@@ -92,16 +92,19 @@ window = sg.Window(
 fig_agg = None
 
 while True:
+    if fig_agg is not None:
+        delete_fig_agg(fig_agg.get_tk_widget())
     fig_agg = draw_figure(window["-CANVAS-"].TKCanvas, graph())
 
-    event, values = window.read()
+    posx += 0.1
+    if posx >= 1:
+        posx = -1
+    event, values = window.read(timeout=100)
 
     if event == "sliderA" or event == "sliderX" or event == "sliderY":
-        if fig_agg is not None:
-            delete_fig_agg(fig_agg.get_tk_widget())
-            posx = values['sliderX']
-            posy = values['sliderY']
-            fct.V = values['sliderA'] / 100
+        posx = values['sliderX'] / 10
+        posy = values['sliderY'] / 10
+        fct.V = values['sliderA'] / 100
 
     if event == "Quit" or event == sg.WIN_CLOSED:
         break
