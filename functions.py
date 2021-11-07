@@ -22,9 +22,9 @@ x, y, z = pos
 #fonctions
 
 
-module = lambda x,y,z = math.sqrt(x**2 + y**2 + z**2)
+module = lambda x,y,z : math.sqrt(x**2 + y**2 + z**2)
 
-gamma = lambda V = 1 / math.sqrt(1.0 - V**2)
+gamma = lambda V : 1 / math.sqrt(1.0 - V**2)
 
 
 def transform_x(x):
