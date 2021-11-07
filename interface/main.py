@@ -4,11 +4,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import PySimpleGUI as sg
 import matplotlib
 import matplotlib.pyplot as plt
+import functions as fct
 matplotlib.use("TkAgg")
 
 #plot value
-y = [1, 10]
-x = [1, 50]
+y = [-10, 10]
+x = [-10, 10]
+posx = 0
+posy = 0
 a = 2
 b = 4
 
@@ -16,6 +19,23 @@ b = 4
 def delete_fig_agg(fig):
     fig.forget()
     plt.close('all')
+
+
+def graph():
+    fct.posArray = np.array([[fct.x - posx, fct.y - posy, fct.z] for fct.x in np.arange(-1.5, 1.5, 0.2) for fct.y in np.arange(-1.5, 1.5, 0.2) for fct.z in range(1, 3)])
+    fig = matplotlib.figure.Figure(figsize=(20, 20), dpi=20)
+    axes = fig.add_axes([0, 0, 1, 1])
+
+    elecprime_list = np.array([fct.champ_elecprime(vec[0], vec[1], vec[2]) for vec in fct.posArray])
+    x_list = elecprime_list[:, 0]
+    y_list = elecprime_list[:, 1]
+    colors = elecprime_list[:, 2]
+    plt.set_cmap("Oranges_r")
+
+    axes.axhline(y=0, color='k')
+    axes.axvline(x=0, color='k')
+    axes.quiver(fct.posArray[:, 0], fct.posArray[:, 1], x_list, y_list, colors, units="xy")
+    return fig
 
 
 def create_plot():
@@ -32,9 +52,9 @@ def draw_figure(canvas, figure):
     return figure_canvas_agg
 
 
-sliderY = sg.Slider(range=(y[0], y[1]), default_value=y[1], orientation="vertical",
+sliderY = sg.Slider(range=(y[0], y[1]), default_value=(y[0] + y[1]), orientation="vertical",
                     enable_events=True, key="sliderY", expand_y=True)
-sliderX = sg.Slider(range=(x[0], x[1]), default_value=x[1], orientation="horizontal",
+sliderX = sg.Slider(range=(x[0], x[1]), default_value=(x[0] + x[1]), orientation="horizontal",
                     enable_events=True, key="sliderX", expand_x=True)
 
 render_graph = [
@@ -45,12 +65,11 @@ render_graph = [
     [sg.Button("Quit simulation", expand_x=True, key="Quit")]
 ]
 
-sliderA = sg.Slider(range=(1, 10), orientation="horizontal", enable_events=True, key="sliderA", )
+sliderA = sg.Slider(range=(1, 99), orientation="horizontal", enable_events=True, key="sliderA")
 sliderB = sg.Slider(range=(1, 10), orientation="horizontal", enable_events=True, key="sliderB")
 
 options = [
-    [sg.Text("A parameter :"), sliderA],
-    [sg.Text("B parameter :"), sg.VSeperator(), sliderB]
+    [sg.Text("V parameter :"), sliderA]
 ]
 
 # Define the window layout
@@ -73,17 +92,16 @@ window = sg.Window(
 fig_agg = None
 
 while True:
-    fig_agg = draw_figure(window["-CANVAS-"].TKCanvas, create_plot())
+    fig_agg = draw_figure(window["-CANVAS-"].TKCanvas, graph())
 
     event, values = window.read()
 
-    if event == "sliderA" or event == "sliderB" or event == "sliderX" or event == "sliderY":
+    if event == "sliderA" or event == "sliderX" or event == "sliderY":
         if fig_agg is not None:
             delete_fig_agg(fig_agg.get_tk_widget())
-            x[1] = values['sliderX']
-            y[1] = values['sliderY']
-            a = values['sliderA']
-            b = values['sliderB']
+            posx = values['sliderX']
+            posy = values['sliderY']
+            fct.V = values['sliderA'] / 100
 
     if event == "Quit" or event == sg.WIN_CLOSED:
         break
