@@ -20,11 +20,12 @@ t = 10.
 x, y, z = pos
 
 #fonctions
-def get_module(x, y, z):
-    return math.sqrt(x**2 + y**2 + z**2)
 
-def get_gamma():
-    return 1/(math.sqrt(1.0 - (V**2)))
+
+module = lambda x,y,z = math.sqrt(x**2 + y**2 + z**2)
+
+gamma = lambda V = 1 / math.sqrt(1.0 - V**2)
+
 
 def transform_x(x):
     return get_gamma() * (x - (V*t))
@@ -40,15 +41,23 @@ tp = transform_t(t)
 
 
 #Champ électrique dans S:
-def get_champ_elec(x, y, z):
-    Etr = Q / (4 * math.pi * e0 * get_module(x, y, z)**3)
-    return np.array([[x * Etr], [y * Etr], [z * Etr]])
+def champ_elec(x, y, z):
+    '''
+    Évalue le champ électrique à la position (x,y,z) de la charge ponctuelle dans le référentiel inertiel mobile (non-prime).
+    '''
+    return Q / (4 * math.pi * e0 * module(x, y, z)**3) * np.array([x, y, z])
     
 #Champ électrique dans S':
-def get_champ_elecprime(x, y, z):   
-    Eptr = Q / (4 * math.pi * e0 * get_module(x, y, z)**3)
-    return np.array([[x * Eptr], [y * Eptr * get_gamma()], [z * Eptr * get_gamma()]])
+def champ_elecprime(x, y, z):
+    '''
+    Évalue le champ électrique à la position (x,y,z) de la charge ponctuelle dans le référentiel inertiel fixe (prime)
+    '''
+    return champ_elec(x,y,z) * np.array([0, gamma(V), gamma(V)])
+
 
 #Champ magnétique dans S:
 def get_champ_mag(x, y, z):
-    Btr = (u0 * Q * get_gamma() * V) / (4 * math.pi * (get_gamma()**2 * (transform_x(x) + V * transform_t(t))**2))
+    '''
+    Évalue le champ magnétique à la position (x,y,z) de la charge ponctuelle dans le référentiel inertiel fixe (prime)
+    '''
+    return u0 * Q * gamma(V) * V / (4 * math.pi * module(x,y,z)**3) * np.array([0, z, -y])
