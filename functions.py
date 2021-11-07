@@ -62,3 +62,4 @@ def get_champ_mag(x, y, z):
     '''
     return u0 * Q * gamma(V) * V / (4 * math.pi * module(x,y,z)**3) * np.array([[0], [z], [-y]])
 
+print(champ_elecprime(1,1,1))
