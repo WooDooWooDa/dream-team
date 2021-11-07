@@ -8,7 +8,7 @@ e0 = 8.8541878128 * 10**-12
 u0 = 12.566370614 * 10**-7
 
 #variable inavariable
-Q = 3
+Q = 1.602 * 10**-19
 
 #Vecteur position
 pos = np.array([[2.], [3.], [4.]])
@@ -45,7 +45,7 @@ def champ_elec(x, y, z):
     '''
     Évalue le champ électrique à la position (x,y,z) de la charge ponctuelle dans le référentiel inertiel mobile (non-prime).
     '''
-    return Q / (4 * math.pi * e0 * module(x, y, z)**3) * np.array([x, y, z])
+    return Q / (4 * math.pi * e0 * module(x, y, z)**3) * np.array([[x], [y], [z]])
     
 #Champ électrique dans S':
 def champ_elecprime(x, y, z):
@@ -61,3 +61,4 @@ def get_champ_mag(x, y, z):
     Évalue le champ magnétique à la position (x,y,z) de la charge ponctuelle dans le référentiel inertiel fixe (prime)
     '''
     return u0 * Q * gamma(V) * V / (4 * math.pi * module(x,y,z)**3) * np.array([[0], [z], [-y]])
+
