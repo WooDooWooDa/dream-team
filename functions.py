@@ -5,6 +5,7 @@ import scipy as sp
 
 #Constantes
 e0 = 8.8541878128 * 10**-12
+u0 = 12.566370614 * 10**-7
 
 #variable inavariable
 Q = 3
@@ -25,10 +26,10 @@ def get_module(x, y, z):
 def get_gamma():
     return 1/(math.sqrt(1.0 - (V**2)))
 
-def transform_x():
+def transform_x(x):
     return get_gamma() * (x - (V*t))
 
-def transform_t():
+def transform_t(t):
     return get_gamma() * (t - (V * x))
 
 #Variables dans S'
@@ -38,11 +39,16 @@ zp = z
 tp = transform_t(t)
 
 
-#Champ électrique dans S
-def get_champ_elec():
-    return (Q / (4 * math.pi * e0 * get_module(x, y, z)**3)) * pos
+#Champ électrique dans S:
+def get_champ_elec(x, y, z):
+    Etr = Q / (4 * math.pi * e0 * get_module(x, y, z)**3)
+    return np.array([[x * Etr], [y * Etr], [z * Etr]])
     
-#Champ électrique dans S'
-def get_champ_elecprime():   
-    rp = np.array([[pos[0] * get_gamma()], [pos[1] * get_gamma()], [pos[2]]])
-    return (Q / (4 * math.pi * e0 * get_module(x, y, z)**3)) * rp
+#Champ électrique dans S':
+def get_champ_elecprime(x, y, z):   
+    Eptr = Q / (4 * math.pi * e0 * get_module(x, y, z)**3)
+    return np.array([[x * Eptr], [y * Eptr * get_gamma()], [z * Eptr * get_gamma()]])
+
+#Champ magnétique dans S:
+def get_champ_mag(x, y, z):
+    Btr = (u0 * Q * get_gamma() * V) / (4 * math.pi * (get_gamma()**2 * (transform_x(x))))
