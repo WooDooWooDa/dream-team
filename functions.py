@@ -52,7 +52,7 @@ def champ_elecprime(x, y, z):
     '''
     Évalue le champ électrique à la position (x,y,z) de la charge ponctuelle dans le référentiel inertiel fixe (prime)
     '''
-    return champ_elec(x,y,z) * np.array([0, gamma(V), gamma(V)])
+    return champ_elec(x,y,z) * np.array([[1], [gamma(V)], [gamma(V)]])
 
 
 #Champ magnétique dans S:
@@ -60,4 +60,4 @@ def get_champ_mag(x, y, z):
     '''
     Évalue le champ magnétique à la position (x,y,z) de la charge ponctuelle dans le référentiel inertiel fixe (prime)
     '''
-    return u0 * Q * gamma(V) * V / (4 * math.pi * module(x,y,z)**3) * np.array([0, z, -y])
+    return u0 * Q * gamma(V) * V / (4 * math.pi * module(x,y,z)**3) * np.array([[0], [z], [-y]])
