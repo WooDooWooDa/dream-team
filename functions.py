@@ -16,9 +16,7 @@ pos = np.array([[2.], [3.], [4.]])
 V = 0.6
 t = 10.
 
-x = pos[0, 0]
-y = pos[1, 0]
-z = pos[2, 0]
+x, y, z = pos
 
 #fonctions
 def get_module(x, y, z):
@@ -41,11 +39,10 @@ tp = transform_t(t)
 
 
 #Champ électrique dans S
-def get_champ():
+def get_champ_elec():
     return (Q / (4 * math.pi * e0 * get_module(x, y, z)**3)) * pos
     
 #Champ électrique dans S'
-def get_champprime():   
-    pos[0] *= get_gamma()
-    pos[1] *= get_gamma()
-    return (Q / (4 * math.pi * e0 * get_module(x, y, z)**3)) * pos
+def get_champ_elecprime():   
+    rp = np.array([[pos[0] * get_gamma()], [pos[1] * get_gamma()], [pos[2]]])
+    return (Q / (4 * math.pi * e0 * get_module(x, y, z)**3)) * rp
