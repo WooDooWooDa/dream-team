@@ -51,4 +51,4 @@ def get_champ_elecprime(x, y, z):
 
 #Champ magnétique dans S:
 def get_champ_mag(x, y, z):
-    Btr = (u0 * Q * get_gamma() * V) / (4 * math.pi * (get_gamma()**2 * (transform_x(x))))
+    Btr = (u0 * Q * get_gamma() * V) / (4 * math.pi * (get_gamma()**2 * (transform_x(x) + V * transform_t(t))**2))
