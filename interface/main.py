@@ -23,7 +23,7 @@ def delete_fig_agg(fig):
 
 def graph():
     fct.posArray = np.array([[fct.x - posx, fct.y - posy, fct.z] for fct.x in np.arange(-1.5, 1.5, 0.2) for fct.y in np.arange(-1.5, 1.5, 0.2) for fct.z in range(1, 3)])
-    fig = matplotlib.figure.Figure(figsize=(50, 30), dpi=20)
+    fig = matplotlib.figure.Figure(figsize=(50, 30), dpi=22)
     axes = fig.add_axes([0, 0, 1, 1])
 
     elecprime_list = np.array([fct.champ_elecprime(vec[0], vec[1], vec[2]) for vec in fct.posArray])
